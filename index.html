@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Malla Curricular – UNEARTE (PNF en Artes Audiovisuales)</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f8f8f8;
+      color: #333;
+    }
+    header {
+      background: #222;
+      color: #fff;
+      padding: 1em;
+      text-align: center;
+    }
+    h1 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      background: #333;
+    }
+    .tabs button {
+      background: #444;
+      color: #fff;
+      padding: 0.75em 1em;
+      border: none;
+      cursor: pointer;
+      flex: 1;
+      font-size: 0.9rem;
+    }
+    .tabs button:hover,
+    .tabs button.active {
+      background: #ff9800;
+    }
+    .content {
+      display: none;
+      padding: 1em;
+      background: #fff;
+    }
+    .content.active {
+      display: block;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1em;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 0.5em;
+      font-size: 0.85rem;
+      text-align: center;
+    }
+    th {
+      background: #ff9800;
+      color: white;
+    }
+    @media (max-width: 600px) {
+      .tabs button {
+        flex: 100%;
+      }
+      th, td {
+        font-size: 0.75rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Malla Curricular – UNEARTE<br>PNF en Artes Audiovisuales – Producción</h1>
+  </header>
+
+  <div class="tabs" id="tabs"></div>
+  <div id="content-container"></div>
+
+  <script>
+    const trayectos = {
+      "Iniciación": [
+        ["INI1-MUO", "UNIVERSITARIA", "Taller", 4, "", 4, "INTERDISCIPLINARIO"],
+        ["GUA1-DC4", "GUIÓN AUDIOVISUAL I", "Taller", 4, "", 4, "DISCIPLINARIO"],
+        ["PRA1-DC4", "PRODUCCIÓN AUDIOVISUAL I", "Taller", 4, "", 4, "DISCIPLINARIO"],
+        ["DIA1-DC4", "DIRECCIÓN AUDIOVISUAL I", "Taller", 4, "", 4, "DISCIPLINARIO"],
+        ["EOE1-MU2", "EXPRESIÓN ORAL Y ESCRITA", "Taller", 2, "", 2, "MULTIDISCIPLINARIO"],
+        ["SPT1-MU3", "SABERES POPULARES Y TRADICIONES", "Seminario", 3, "", 3, "MULTIDISCIPLINARIO"],
+        ["CEC1-MU3", "CONCIENCIA EXPLORATORIA CORPORAL", "Taller", 3, "", 3, "MULTIDISCIPLINARIO"],
+        ["PAT1-DU3", "PROYECTO ARTÍSTICO COMUNITARIO I", "Proyecto", 3, "", 3, "MULTIDISCIPLINARIO"]
+      ],
+      "I": [
+        ["CIN1-DC4", "CINEMATOGRAFÍA I", "Taller", 4, "", 4, "DISCIPLINARIO"],
+        ["DAR1-DC4", "DIRECCIÓN DE ARTE I", "Taller", 4, "", 4, "DISCIPLINARIO"],
+        ["COM1-DC4", "COMPOSICIÓN DE MONTAJE I", "Taller", 4, "", 4, "DISCIPLINARIO"],
+        ["SON1-DC4", "SONIDO I", "Taller", 4, "", 4, "DISCIPLINARIO"],
+        ["THA1-MU2", "TEORÍAS E HISTORIA DEL ARTE", "Curso", 2, "", 2, "MULTIDISCIPLINARIO"],
+        ["BMD1-MU2", "BIOÉTICA Y MODELOS DE DESARROLLO", "Curso", 2, "", 2, "MULTIDISCIPLINARIO"],
+        ["PAT2-DU4", "PROYECTO ARTÍSTICO COMUNITARIO II", "Proyecto", 3, "PAT1-DU3", 4, "MULTIDISCIPLINARIO"]
+      ],
+      "II": [
+        ["IFO1-DC2", "INTRODUCCIÓN A LAS FORMAS", "Curso", 2, "", 2, "DISCIPLINARIO"],
+        ["PEE1-DC4", "LA PRODUCCIÓN EN EQUIPO", "Taller", 2, "", 4, "DISCIPLINARIO"],
+        ["PRA2-DC6", "PRODUCCIÓN AUDIOVISUAL II", "Proyecto", 4, "PRA1-DC4", 6, "DISCIPLINARIO"],
+        ["FFE1-MU3", "FUNDAMENTOS FILOSÓFICOS Y ESTÉTICOS", "Curso", 2, "", 3, "MULTIDISCIPLINARIO"],
+        ["ACV1-MUZ", "ARTE Y CULTURA VENEZOLANA", "Curso", 2, "", 2, "MULTIDISCIPLINARIO"],
+        ["PAT3-DU3", "PROYECTO ARTÍSTICO COMUNITARIO III", "Proyecto", 3, "PAT2-DU3", 3, "MULTIDISCIPLINARIO"],
+        ["HAA1-DC2", "HISTORIA DE LAS ARTES AUDIOVISUALES I", "Curso", 2, "", 2, "DISCIPLINARIO"],
+        ["ANA1-DC2", "ANÁLISIS AUDIOVISUAL I", "Curso", 3, "", 2, "DISCIPLINARIO"]
+      ],
+      "III": [
+        ["PRA3-DC6", "PRODUCCIÓN AUDIOVISUAL III", "Proyecto", 4, "PRA2-DC6", 6, "DISCIPLINARIO"],
+        ["MLV1-DC4", "MARCOS LEGALES DEL CINE VENEZOLANO", "Taller", 2, "", 4, "DISCIPLINARIO"],
+        ["IDE1-MU3", "IDIOMA EXTRANJERO I", "Curso", 3, "", 3, "MULTIDISCIPLINARIO"],
+        ["MEI1-MU4", "METODOLOGÍA DE LA INVESTIGACIÓN I", "Taller", 2, "", 4, "MULTIDISCIPLINARIO"],
+        ["PAT4-DU4", "PROYECTO ARTÍSTICO COMUNITARIO IV", "Proyecto", 3, "PAT3-DU3", 4, "MULTIDISCIPLINARIO"]
+      ],
+      "IV": [
+        ["HAA2-DC2", "HISTORIA DE LAS ARTES AUDIOVISUALES II", "Curso", 2, "HAA1-DC2", 2, "DISCIPLINARIO"],
+        ["ANA2-DC2", "ANÁLISIS AUDIOVISUAL II", "Curso", 3, "ANA1-DC2", 2, "DISCIPLINARIO"],
+        ["PRA4-DC6", "PRODUCCIÓN AUDIOVISUAL IV", "Proyecto", 4, "PRA3-DC6", 6, "DISCIPLINARIO"],
+        ["IDE2-MU3", "IDIOMA EXTRANJERO II", "Curso", 2, "IDE1-MU3", 3, "MULTIDISCIPLINARIO"],
+        ["PAT5-DU3", "PROYECTO ARTÍSTICO COMUNITARIO V", "Proyecto", 3, "PAT4-DU4", 3, "MULTIDISCIPLINARIO"]
+      ],
+      "V": [
+        ["HAA3-DC2", "HISTORIA DE LAS ARTES AUDIOVISUALES III", "Curso", 2, "HAA2-DC2", 2, "DISCIPLINARIO"],
+        ["PRP1-DC6", "PLAN DE RODAJE Y PRESUPUESTO", "Proyecto", 4, "PRA2-DC6", 6, "DISCIPLINARIO"],
+        ["SEA1-DC4", "SEMIOLOGÍA DE LAS ARTES AUDIOVISUALES", "Taller", 3, "", 4, "DISCIPLINARIO"],
+        ["APL1-MU2", "APRECIACIÓN LITERARIA", "Curso", 2, "", 2, "MULTIDISCIPLINARIO"],
+        ["MEI2-MU4", "METODOLOGÍA DE LA INVESTIGACIÓN II", "Taller", 2, "MEI1-MU4", 4, "MULTIDISCIPLINARIO"],
+        ["PAT6-DU4", "PROYECTO ARTÍSTICO COMUNITARIO VI", "Proyecto", 3, "PAT5-DU3", 4, "MULTIDISCIPLINARIO"]
+      ],
+      "VI": [
+        ["HAV1-DC2", "HISTORIA DE LAS ARTES AUDIOVISUALES EN VZLA I", "Curso", 2, "", 2, "DISCIPLINARIO"],
+        ["CDC1-DC4", "CIRCUITOS DE CINE", "Taller", 2, "", 4, "DISCIPLINARIO"],
+        ["PRE1-DC6", "PROYECTO DE REALIZACIÓN AUDIOVISUAL I", "Proyecto", 6, "PRP1-DC6", 6, "DISCIPLINARIO"],
+        ["SIN1-MU3", "SEMINARIO DE INVESTIGACIÓN", "Seminario", 2, "MEI2-MU4", 3, "MULTIDISCIPLINARIO"],
+        ["PAT7-DU3", "PROYECTO ARTÍSTICO COMUNITARIO VII", "Proyecto", 3, "PAT6-DU4", 3, "MULTIDISCIPLINARIO"]
+      ],
+      "VII": [
+        ["HAV2-DC2", "HISTORIA DE LAS ARTES AUDIOVISUALES EN VZLA II", "Curso", 2, "HAV1-DC2", 2, "DISCIPLINARIO"],
+        ["DCV1-DC4", "DIFUSIÓN DEL CINE VENEZOLANO", "Taller", 2, "CDC1-DC4", 4, "DISCIPLINARIO"],
+        ["PRE2-DC6", "PROYECTO DE REALIZACIÓN AUDIOVISUAL II", "Proyecto", 6, "PRE1-DC2", 6, "DISCIPLINARIO"],
+        ["PAT8-DU4", "PROYECTO ARTÍSTICO COMUNITARIO VIII", "Proyecto", 3, "PAT7-DU3", 4, "MULTIDISCIPLINARIO"],
+        ["PII1-MU4", "PROYECTO INTEGRAL DE INVESTIGACIÓN", "Proyecto", 2, "SIN1-MU3", 4, "MULTIDISCIPLINARIO"]
+      ],
+      "Egreso": [
+        ["MON1-MUO", "MONOGRAFÍA (TSU)", "Proyecto", "", "MEI1-MU4", "", "EGRESO"],
+        ["TEG8-MEO", "TRABAJO ESPECIAL DE GRADO (LIC.)", "Proyecto", "", "PII1-MU4", "", "EGRESO"]
+      ]
+    };
+
+    const trayectosOrden = Object.keys(trayectos);
+    const tabs = document.getElementById("tabs");
+    const container = document.getElementById("content-container");
+
+    trayectosOrden.forEach((trayecto, i) => {
+      const btn = document.createElement("button");
+      btn.textContent = trayecto;
+      btn.classList.add(i === 0 ? "active" : "");
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".tabs button").forEach(b => b.classList.remove("active"));
+        document.querySelectorAll(".content").forEach(c => c.classList.remove("active"));
+        btn.classList.add("active");
+        document.getElementById(`tab-${i}`).classList.add("active");
+      });
+      tabs.appendChild(btn);
+
+      const div = document.createElement("div");
+      div.className = `content ${i === 0 ? "active" : ""}`;
+      div.id = `tab-${i}`;
+
+      let table = `<table><thead><tr><th>Código</th><th>Unidad Curricular</th><th>Técnica</th><th>Horas</th><th>Prelación</th><th>UC</th><th>Componente</th></tr></thead><tbody>`;
+      trayectos[trayecto].forEach(row => {
+        table += `<tr>${row.map(col => `<td>${col}</td>`).join('')}</tr>`;
+      });
+      table += `</tbody></table>`;
+      div.innerHTML = `<h2>Trayecto ${trayecto}</h2>` + table;
+      container.appendChild(div);
+    });
+  </script>
+</body>
+</html>
